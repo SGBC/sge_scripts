@@ -99,7 +99,7 @@ cat <<- EOF > "$output/$uuid.sh"
     #!/usr/bin/env bash
     module load albacore
     read_fast5_basecaller.py -i ${directory} -t ${cpus} -s ${output} \
-        -f ${flowcell} -k ${kit} -o fastq
+        -f ${flowcell} -k ${kit} -r -o fastq
 EOF
 echo "Writing the qsub script: OK"
 
