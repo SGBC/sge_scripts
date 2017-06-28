@@ -19,7 +19,7 @@ usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
             -d <fastq> path to the reads file.
             -o <path> path to save output"
 
-while getopts "he:c:m:t:i:s:f:k:o:" option
+while getopts "he:c:m:t:r:d:o:" option
     do
         case "$option" in
             h) echo "$usage"
