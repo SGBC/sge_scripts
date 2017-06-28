@@ -93,7 +93,7 @@ uuid=$(uuidgen)
 cat <<- EOF > "$output/$uuid.sh"
     #!/usr/bin/env bash
     module load graphmap
-    graphmap -r ${reference} -t ${cpus} -d ${reads} \
+    graphmap align -r ${reference} -t ${cpus} -d ${reads} \
         -o ${output}/${prefix_reads}.sam
 EOF
 echo "Writing the qsub script: OK"
