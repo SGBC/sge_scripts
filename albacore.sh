@@ -38,9 +38,9 @@ while getopts "he:c:m:t:i:s:f:k:o:" option
                 ;;
             o) output=$(readlink -f "$OPTARG")
                 ;;
-            f) flowcell=$(readlink -f "$OPTARG")
+            f) flowcell="$OPTARG"
                 ;;
-            k) kit=$(readlink -f "$OPTARG")
+            k) kit="$OPTARG"
                 ;;
             :) printf "missing argument for -%s\n" "$OPTARG" >&2
             echo "$usage" >&2
