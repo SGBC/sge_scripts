@@ -78,6 +78,10 @@ if [ -z "${output+x}" ]
 fi
 echo "Checking parameters: OK"
 
+echo "Creating output directory"
+mkdir -p "$output"
+echo "Creating output directory: OK"
+
 echo "Writing the qsub script"
 uuid=$(uuidgen)
 cat <<- EOF > "$output/$uuid.sh"
