@@ -3,7 +3,7 @@
 # long read mapping (with graphmap)
 
 usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
-    [-r reference] [-1 reads_1.fq] [-2 reads_2.fq] [-o output] --
+    [-r reference] [-d reads.fastq] [-o output] --
 
         long read mapping (with graphmap)
 

@@ -3,7 +3,7 @@
 # basecalling for nanopore reads (with albacore)
 
 usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
-    [-r reference] [-1 reads_1.fq] [-2 reads_2.fq] [-o output] --
+    [-i fast5 dir] [-o output] [-f flowcell] [-k kit] --
 
         basecalling for nanopore reads (with albacore)
 
