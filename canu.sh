@@ -105,7 +105,7 @@ cat <<- EOF > "$output/$uuid.sh"
     #!/usr/bin/env bash
     module load canu
     canu -p ${prefix_reads} -d ${output} \
-        genomeSize=${genome_size} -${read_type} ${reads} \
+        genomeSize=${genome_size} -${type} ${reads} \
         maxThreads=${cpus} maxMemory=${total_mem}
 EOF
 echo "Writing the qsub script: OK"
