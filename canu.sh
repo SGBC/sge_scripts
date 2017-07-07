@@ -44,7 +44,7 @@ while getopts "he:c:m:t:i:r:g:o:" option
             [[ $read_type =~ $OPTARG ]] && type="$OPTARG" || \
             { printf "%s\n\Read type not recognised\n" "$usage">&2; exit 1; }
                 ;;
-            g) genome_size = "$OPTARG"
+            g) genome_size="$OPTARG"
                 ;;
             o) output=$(readlink -f "$OPTARG")
                 ;;
