@@ -106,10 +106,9 @@ cat <<- EOF > "$output/$uuid.sh"
         then
             bowtie2-build "$reference" "$output/$prefix_ref"
     fi
-    bowtie2 -p "$cpus" -x "$output/$prefix_ref" -1 "$r1" -2 "$r2" \
-        -S "$output/$prefix_reads.sam"
-    samtools view -@ "$cpus" -b -o "$output/$prefix_reads.bam" "$output/$prefix_reads.sam" \
-        && rm "$output/$prefix_reads.sam"
+    bowtie2 -p "$cpus" -x "$output/$prefix_ref" -1 "$r1" -2 "$r2" | \
+    samtools view -@ "$cpus" -b - | samtools sort -@ "$cpus" -m "$mem" \
+        -o "$output/$prefix_reads.bam"
 EOF
 echo "Writing the qsub script: OK"
 
