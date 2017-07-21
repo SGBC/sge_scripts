@@ -99,7 +99,7 @@ EOF
 echo "Writing the qsub script: OK"
 
 echo "Queuing Megahit"
-qsub -N Bowtie -l h_rt="$run_time":0:0,h_vmem="$mem"G -pe smp "$cpus" -cwd \
+qsub -N Megahit -l h_rt="$run_time":0:0,h_vmem="$mem"G -pe smp "$cpus" -cwd \
     -j y -m sea -M "$email" "$output/$uuid.sh"
 echo "Queuing Megahit: OK"
 exit 0
