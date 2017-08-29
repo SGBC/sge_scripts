@@ -14,7 +14,7 @@ usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
             -m <int> number of ram per cpu to use
             -t <time> upper time limit for the job, in hours
 
-        albacore options:
+        miniasm options options:
     		-i <fastq> input fastq file
             -o <path> path to save output"
 
