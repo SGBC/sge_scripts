@@ -93,7 +93,7 @@ cat <<- EOF > "$output/$uuid.sh"
     miniasm -f "${reads}" "${output}/${prefix_reads}.paf.gz" > \
         "${output}/${prefix_reads}.gfa"
     # gfa to fasta
-    awk '/^S/{print ">"$2"\n"$3}' "${output}/${prefix_reads}.gfa" | \
+    awk '/^S/{print ">"\$2"\n"\$3}' "${output}/${prefix_reads}.gfa" | \
         fold > "${output}/${prefix_reads}.fasta"
 EOF
 echo "Writing the qsub script: OK"
