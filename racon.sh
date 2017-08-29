@@ -95,7 +95,8 @@ cat <<- EOF > "$output/$uuid.sh"
     module load racon
     module load minimap/2.1
     minimap -x map10k -t "${cpus}" "${assembly}" "${reads}" | \
-    racon -t "${cpus}" "${reads}" - "${assembly}" "${assembly}_consensus.fasta"
+    racon -t "${cpus}" "${reads}" - "${assembly}" \
+        "${output}/${prefix_assembly}_consensus.fasta"
 EOF
 echo "Writing the qsub script: OK"
 
