@@ -95,6 +95,7 @@ cat <<- EOF > "$output/$uuid.sh"
     module load nanopolish
     module load minimap/2.1
     module load samtools
+    module load parallel
     minimap -ax map-ont -t "${cpus}" "${assembly}" "${reads}" | \
     samtools view -@ "${cpus}" -b - | samtools sort -@ "${cpus}" -m "${mem}G" \
         -o "${output}/${prefix_assembly}.bam"
