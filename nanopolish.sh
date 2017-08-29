@@ -102,7 +102,7 @@ cat <<- EOF > "$output/$uuid.sh"
     samtools index "${output}/${prefix_assembly}.bam"
     nanopolish_makerange.py "${assembly}" | \
     parallel --results "${output}" -P "${cpus}" \
-    nanopolish variants --consensus "${output}/"polished.{1}.fa -w {1} -r "${reads}" \
+    nanopolish variants --consensus "${output}/polished.{1}.fa" -w "{1}" -r "${reads}" \
         -b "${output}/${prefix_assembly}.bam" -g "${assembly}" -t "${cpus}" \
         --min-candidate-frequency 0.1
     nanopolish_merge.py "${output}/polished.*.fa" > \
