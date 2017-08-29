@@ -5,7 +5,7 @@
 usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
     [-i reads.fastq] [-t read type] [-o output] [-g genome size] --
 
-        assembly for long ONT reads (using minimap2 and miniasm)
+        assembly for long ONT or pacbio reads (using minimap2 and miniasm)
 
         qsub options:
     		-h show this useful help
@@ -16,9 +16,10 @@ usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
 
         miniasm options options:
     		-i <fastq> input fastq file
+            -p [ava-pb|ava-ont] preset (ava-pb for pacbio, ava-ont for ONT)
             -o <path> path to save output"
 
-while getopts "he:c:m:t:i:o:" option
+while getopts "he:c:m:t:i:p:o:" option
     do
         case "$option" in
             h) echo "$usage"
@@ -34,6 +35,10 @@ while getopts "he:c:m:t:i:o:" option
                 ;;
             i) reads=$(readlink -f "$OPTARG")
             prefix_reads=$(basename ${reads%.*})
+                ;;
+            p) preset_choices="ava-pb ava-ont"
+            [[ $preset_choices =~ $OPTARG ]] && preset="$OPTARG" || \
+            { printf "%s\n\Prest not recognised\n" "$usage">&2; exit 1; }
                 ;;
             o) output=$(readlink -f "$OPTARG")
                 ;;
@@ -88,7 +93,7 @@ cat <<- EOF > "$output/$uuid.sh"
     #!/usr/bin/env bash
     module load miniasm
     module load minimap/2.1
-    minimap -x ava-ont -t "${cpus}" "${reads}" "${reads}" | \
+    minimap -x "${preset}" -t "${cpus}" "${reads}" "${reads}" | \
         gzip -1 > "${output}/${prefix_reads}.paf.gz"
     miniasm -f "${reads}" "${output}/${prefix_reads}.paf.gz" > \
         "${output}/${prefix_reads}.gfa"
