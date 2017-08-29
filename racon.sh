@@ -36,7 +36,7 @@ while getopts "he:c:m:t:i:a:o:" option
             i) reads=$(readlink -f "$OPTARG")
                 ;;
             a) assembly=$(readlink -f "$OPTARG")
-            prefix_assembly=$(readlink -f "$OPTARG")
+            prefix_assembly=$(basename ${assembly%.*})
                 ;;
             o) output=$(readlink -f "$OPTARG")
                 ;;

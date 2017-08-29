@@ -36,7 +36,7 @@ while getopts "he:c:m:t:i:a:o:" option
             i) reads=$(readlink -f "$OPTARG")
                 ;;
             a) assembly=$(readlink -f "$OPTARG")
-            prefix_assembly=$(readlink -f "$OPTARG")
+            prefix_assembly=$(basename ${assembly%.*})
                 ;;
             o) output=$(readlink -f "$OPTARG")
                 ;;
@@ -98,7 +98,7 @@ cat <<- EOF > "$output/$uuid.sh"
     minimap -ax map-ont -t "${cpus}" "${assembly}" "${reads}" | \
     samtools view -@ "${cpus}" -b - | samtools sort -@ "${cpus}" -m "${mem}G" \
         -o "${output}/${prefix_assembly}.bam"
-    samools index "${output}/${prefix_assembly}.bam"
+    samtools index "${output}/${prefix_assembly}.bam"
     nanopolish_makerange.py "${assembly}" | \
     parallel --results nanopolish.results -P "${cpus}" \
     nanopolish variants --consensus "${output}/"polished.{1}.fa -w {1} -r "${reads}" \
