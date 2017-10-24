@@ -16,10 +16,11 @@ usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
 
         nanopolish options:
     		-i <fastq> input fastq|a file
+            -d <path> path to raw fast5 directory
             -a <fasta> assembly in fasta format
             -o <path> path to save output"
 
-while getopts "he:c:m:t:i:a:o:" option
+while getopts "he:c:m:t:i:d:a:o:" option
     do
         case "$option" in
             h) echo "$usage"
