@@ -35,6 +35,8 @@ while getopts "he:c:m:t:i:a:o:" option
                 ;;
             i) reads=$(readlink -f "$OPTARG")
                 ;;
+            d) raw_signal=$(readlink -f "$OPTARG")
+                ;;
             a) assembly=$(readlink -f "$OPTARG")
             prefix_assembly=$(basename ${assembly%.*})
                 ;;
@@ -76,6 +78,9 @@ fi
 if [ -z "${reads+x}" ]
     then printf "%s\n\nEmply value for -i\n" "$usage" >&2; exit 1
 fi
+if [ -z "${raw_signal+x}" ]
+    then printf "%s\n\nEmply value for -d\n" "$usage" >&2; exit 1
+fi
 if [ -z "${assembly+x}" ]
     then printf "%s\n\nEmply value for -a\n" "$usage" >&2; exit 1
 fi
@@ -92,10 +97,11 @@ echo "Writing the qsub script"
 uuid=$(uuidgen)
 cat <<- EOF > "$output/$uuid.sh"
     #!/usr/bin/env bash
-    module load nanopolish
+    module load nanopolish/0.8.3
     module load minimap/2.1
     module load samtools
     module load parallel
+    nanopolish index -d "${raw_signal}" "${reads}"
     minimap -ax map-ont -t "${cpus}" "${assembly}" "${reads}" | \
     samtools view -@ "${cpus}" -b - | samtools sort -@ "${cpus}" -m "${mem}G" \
         -o "${output}/${prefix_assembly}.bam"
