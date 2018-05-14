@@ -16,11 +16,11 @@ usage="$(basename "$0") [-h] [-e email] [-c cpus] [-m ram] [-t time]
 
         bowtie options:
     		-r <fasta> reference in fasta format
-            -1 <fastq> reads file in fastq format
-            -2 <fastq> reads file in fastq format
+            -1 <fastq> forward reads
+            -2 <fastq> reverse reads (optional, only use -1 for single end)
     		-o <path> output directory"
 
-while getopts "he:c:m:t:r:1:2:o:" option
+while getopts "he:c:m:t:r:1:2o:" option
     do
         case "$option" in
             h) echo "$usage"
@@ -84,9 +84,6 @@ fi
 if [ -z "${r1+x}" ]
     then printf "%s\n\nEmply value for -1\n" "$usage" >&2; exit 1
 fi
-if [ -z "${r2+x}" ]
-    then printf "%s\n\nEmply value for -2\n" "$usage" >&2; exit 1
-fi
 if [ -z "${output+x}" ]
     then printf "%s\n\nEmply value for -o\n" "$usage" >&2; exit 1
 fi
@@ -98,18 +95,36 @@ echo "Creating output directory: OK"
 
 echo "Writing the qsub script"
 uuid=$(uuidgen)
-cat <<- EOF > "$output/$uuid.sh"
-    #!/usr/bin/env bash
-    module load bowtie
-    module load samtools
-    if [ ! -f "$output/$prefix_ref".1.bt2 ]
-        then
-            bowtie2-build "$reference" "$output/$prefix_ref"
-    fi
-    bowtie2 -p "$cpus" -x "$output/$prefix_ref" -1 "$r1" -2 "$r2" | \
-    samtools view -@ "$cpus" -b - | samtools sort -@ "$cpus" -m "$mem"G \
-        -o "$output/$prefix_reads.bam"
+if [ -z "${r2+x}" ]
+    then
+        cat <<- EOF > "$output/$uuid.sh"
+        #!/usr/bin/env bash
+        module load bowtie
+        module load samtools
+        if [ ! -f "$output/$prefix_ref".1.bt2 ]
+            then
+                bowtie2-build "$reference" "$output/$prefix_ref"
+        fi
+        bowtie2 -p "$cpus" -x "$output/$prefix_ref" -U "$r1" | \
+        samtools view -@ "$cpus" -b - | samtools sort -@ "$cpus" -m "$mem"G \
+            -o "$output/$prefix_reads.bam"
 EOF
+    else
+        cat <<- EOF > "$output/$uuid.sh"
+        #!/usr/bin/env bash
+        module load bowtie
+        module load samtools
+        if [ ! -f "$output/$prefix_ref".1.bt2 ]
+            then
+                bowtie2-build "$reference" "$output/$prefix_ref"
+        fi
+        bowtie2 -p "$cpus" -x "$output/$prefix_ref" -1 "$r1" -2 "$r2" | \
+        samtools view -@ "$cpus" -b - | samtools sort -@ "$cpus" -m "$mem"G \
+            -o "$output/$prefix_reads.bam"
+EOF
+
+fi
+
 echo "Writing the qsub script: OK"
 
 echo "Queuing Bowtie"
